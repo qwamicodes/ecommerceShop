@@ -4,33 +4,36 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-//imports for setting up redux
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import allReducers from "./app/redux";
+//imports to handle fonts from expo fonts
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
 
 // screen imports from ./screen
 import Login from "./app/screen/Login";
 import Home from "./app/screen/Home";
 
-//creating store using redux (createStore)
-const store = createStore(allReducers, applyMiddleware(thunk));
-
 export default function App() {
   const Stack = createStackNavigator();
 
-  return (
-    <Provider store={store}>
+  let [fontsLoaded] = useFonts({
+    "Zen-Bold": require("./app/assets/fonts/Zen-Bold.ttf"),
+    "Zen-Regular": require("./app/assets/fonts/Zen-Regular.ttf"),
+    "Zen-Light": require("./app/assets/fonts/Zen-Light.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Home"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator>
       </NavigationContainer>
-    </Provider>
-  );
+    );
+  }
 }

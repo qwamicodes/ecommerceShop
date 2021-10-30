@@ -7,7 +7,9 @@ import styled from "styled-components/native";
 const Login = () => {
   const navigation = useNavigation();
 
-  const [email, setEmail] = useState();
+  //state variables for the password and errors used
+  const [email, setEmail] = useState("dsjdk");
+
   const [password, setPassword] = useState();
   const [error, setError] = useState();
 
@@ -41,12 +43,12 @@ const Login = () => {
               </Text>
             )}
             <StyledInputs
-              type="Email"
-              placeholder="Email Address"
+              type="username"
+              placeholder="Username"
               onChange={(text) => setEmail(text)}
             />
             <StyledInputs
-              type="Password"
+              type="password"
               placeholder="Password"
               onChange={(text) => setPassword(text)}
               secureTextEntry={true}
