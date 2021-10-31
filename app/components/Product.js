@@ -6,7 +6,7 @@ const Product = ({ title, image, price }) => {
   return (
     <StyledProduct>
       <StyledProductImage>
-        <Image source={{ uri: `${image}` }} />
+        <Image style={{ width: 50, height: 50 }} source={{ uri: image }} />
       </StyledProductImage>
       <StyledProductName>
         <Text>{title}</Text>

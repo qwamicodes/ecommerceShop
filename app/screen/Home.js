@@ -4,7 +4,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  FlatList,
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -32,6 +31,7 @@ const Home = () => {
       },
     };
 
+    //setting the products data back from the api to the products state
     axios
       .request(options)
       .then((data) => setProducts(data.data.results))
@@ -71,18 +71,18 @@ const Home = () => {
       </StyledHomeCateg>
       <ScrollView
         showsHorizontalScrollIndicator={false}
-        style={{ flex: 1 }}
+        style={{ flex: 1, height: "100%" }}
         contentContainerStyle={{ flex: 1 }}
       >
         {products &&
-          products.map((product) => {
+          products.map((product) => (
             <Product
               key={uuid.v4()}
               image={product.media.imageUrl}
               title={product.title}
               price={product.price}
-            />;
-          })}
+            />
+          ))}
       </ScrollView>
     </SafeAreaView>
   );
