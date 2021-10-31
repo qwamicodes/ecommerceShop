@@ -5,3 +5,6 @@ export const statusBarConfig = {
   paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   backgroundColor: "#fff",
 };
+
+export const primaryColorDark = "#00074b";
+export const primaryColor = "#000e8d";

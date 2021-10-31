@@ -1,21 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  ScrollView,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import axios from "axios";
+import uuid from "react-native-uuid";
 
 import CategoryContainer from "../components/CategoryContainer";
+import Product from "../components/Product";
 
 import { Ionicons, Feather, Entypo } from "@expo/vector-icons";
+import { primaryColorDark } from "../helpers/Variables";
 
 const Home = () => {
   const [products, setProducts] = useState();
-  const [brands, setBrands] = useState();
 
   useEffect(() => {
     const options = {
       method: "GET",
-      url: "https://v1-sneakers.p.rapidapi.com/v1/brands",
+      url: "https://v1-sneakers.p.rapidapi.com/v1/sneakers",
+      params: { limit: 20 },
       headers: {
         "x-rapidapi-host": "v1-sneakers.p.rapidapi.com",
         "x-rapidapi-key": "d3456c96a9mshb62066b1e421ea0p1749acjsna406b9a86a1f",
@@ -24,12 +34,8 @@ const Home = () => {
 
     axios
       .request(options)
-      .then(function (response) {
-        setBrands(response.data.results);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+      .then((data) => setProducts(data.data.results))
+      .catch((err) => alert(err.message));
   }, []);
 
   return (
@@ -45,8 +51,9 @@ const Home = () => {
         <Text
           style={{
             fontSize: 25,
-            fontWeight: "bold",
-            fontFamily: "Zen-Regular",
+            fontFamily: "Zen-Bold",
+            color: `${primaryColorDark}`,
+            marginLeft: 20,
           }}
         >
           Our Products
@@ -57,9 +64,26 @@ const Home = () => {
           <Entypo name="chevron-small-down" size={24} color="grey" />
         </View>
       </StyledHomeHeading>
-      <StyledHomeCateg horizontal={true}>
-        {brands && brands.map((brand) => <CategoryContainer name={brand} />)}
+      <StyledHomeCateg>
+        {["Adidas", "Nike", "Jordan"].map((brand) => (
+          <CategoryContainer name={brand} key={uuid.v4()} />
+        ))}
       </StyledHomeCateg>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flex: 1 }}
+      >
+        {products &&
+          products.map((product) => {
+            <Product
+              key={uuid.v4()}
+              image={product.media.imageUrl}
+              title={product.title}
+              price={product.price}
+            />;
+          })}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -92,10 +116,11 @@ const StyledHomeHeading = styled.View`
   align-items: center;
 `;
 
-const StyledHomeCateg = styled.ScrollView`
+const StyledHomeCateg = styled.View`
   flex-basis: 8%;
   flex-direction: row;
-  height: 10px;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 export default Home;
