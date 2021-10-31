@@ -71,8 +71,10 @@ const Home = () => {
       </StyledHomeCateg>
       <ScrollView
         showsHorizontalScrollIndicator={false}
-        style={{ flex: 1, height: "100%" }}
-        contentContainerStyle={{ flex: 1 }}
+        style={{
+          flex: 1,
+          height: "100%",
+        }}
       >
         {products &&
           products.map((product) => (
