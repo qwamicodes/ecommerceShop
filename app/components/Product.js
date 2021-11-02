@@ -1,19 +1,40 @@
 import React from "react";
 import { Text, Image } from "react-native";
 import styled from "styled-components/native";
+import { primaryColor } from "../helpers/Variables";
 
-const Product = ({ title, image, price }) => {
+const Product = ({ title, image, price, submit }) => {
   return (
-    <StyledProduct>
+    <StyledProduct onPress={submit}>
       <StyledProductImage>
-        <Image style={{ width: 50, height: 50 }} source={{ uri: image }} />
+        <Image
+          style={{ width: "100%", height: "100%" }}
+          source={{ uri: image }}
+        />
       </StyledProductImage>
       <StyledProductName>
-        <Text>{title}</Text>
+        <Text
+          style={{
+            color: `${primaryColor}`,
+            fontFamily: "Zen-Regular",
+            textAlign: "center",
+          }}
+        >
+          {title}
+        </Text>
       </StyledProductName>
       <StyledProductPrice>
-        <Text>$</Text>
-        <Text>{price}</Text>
+        <Text
+          style={{
+            color: `${primaryColor}`,
+            fontFamily: "Zen-Regular",
+            textAlign: "center",
+            fontSize: 25,
+            fontWeight: "500",
+          }}
+        >
+          $ {price}
+        </Text>
       </StyledProductPrice>
     </StyledProduct>
   );
@@ -21,13 +42,31 @@ const Product = ({ title, image, price }) => {
 
 const StyledProduct = styled.TouchableOpacity`
   background-color: #fff;
-  width: 45%;
+  width: 85%;
+  height: 330px;
   border-radius: 20px;
-  margin: 10px;
+  margin: 10px auto;
+  overflow: hidden;
 `;
-const StyledProductImage = styled.View``;
-const StyledProductName = styled.View``;
-const StyledProductPrice = styled.View``;
+
+const StyledProductImage = styled.View`
+  flex-basis: 60%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledProductName = styled.View`
+  flex-basis: 25%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledProductPrice = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
 // const StyledProductRating = styled.View``;
 
 export default Product;

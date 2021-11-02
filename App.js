@@ -11,6 +11,7 @@ import AppLoading from "expo-app-loading";
 // screen imports from ./screen
 import Login from "./app/screen/Login";
 import Home from "./app/screen/Home";
+import ProductDetails from "./app/screen/ProductDetails";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -32,6 +33,7 @@ export default function App() {
         >
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="ProductDetails" component={ProductDetails} />
         </Stack.Navigator>
       </NavigationContainer>
     );

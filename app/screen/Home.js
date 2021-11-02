@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
-import axios from "axios";
 import uuid from "react-native-uuid";
+import axios from "axios";
+
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import CategoryContainer from "../components/CategoryContainer";
 import Product from "../components/Product";
-
-import { Ionicons, Feather, Entypo } from "@expo/vector-icons";
 import { primaryColorDark } from "../helpers/Variables";
+import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const [products, setProducts] = useState();
+  const [toggleMenu, setToggleMenu] = useState(false);
 
   useEffect(() => {
     const options = {
@@ -41,11 +42,25 @@ const Home = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StyledHomeHeader>
-        <Ionicons name="md-menu-outline" size={24} color="black" />
-        <StyledHomeLogo source={require("../assets/logo.jpg")} />
-        <TouchableOpacity>
-          <Feather name="shopping-bag" size={24} color="black" />
+        <TouchableOpacity onPress={() => setToggleMenu(!toggleMenu)}>
+          <Ionicons name="md-menu-outline" size={24} color="black" />
         </TouchableOpacity>
+        <StyledHomeLogo source={require("../assets/logo.jpg")} />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            width: 80,
+          }}
+        >
+          <TouchableOpacity>
+            <Feather name="settings" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Feather name="shopping-bag" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
       </StyledHomeHeader>
       <StyledHomeHeading>
         <Text
@@ -74,15 +89,19 @@ const Home = () => {
         style={{
           flex: 1,
           height: "100%",
+          marginHorizontal: "auto",
         }}
       >
         {products &&
           products.map((product) => (
             <Product
+              submit={() =>
+                navigation.navigate("ProductDetails", { ...product })
+              }
               key={uuid.v4()}
               image={product.media.imageUrl}
               title={product.title}
-              price={product.price}
+              price={product.retailPrice}
             />
           ))}
       </ScrollView>
@@ -109,6 +128,7 @@ const StyledHomeLogo = styled.Image`
   height: 30px;
   width: 30px;
   border-radius: 50px;
+  margin-left: 50px;
 `;
 
 const StyledHomeHeading = styled.View`

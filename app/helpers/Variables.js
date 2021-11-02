@@ -8,3 +8,4 @@ export const statusBarConfig = {
 
 export const primaryColorDark = "#00074b";
 export const primaryColor = "#000e8d";
+export const primaryColorLight = "#add8e6";
