@@ -57,7 +57,9 @@ const ProductDetails = ({ route, navigation }) => {
               alignItems: "center",
             }}
           >
-            <Text style={{ color: `${primaryColorDark}` }}>{cart.length}</Text>
+            <Text style={{ color: `${primaryColorDark}` }}>
+              {/* {cart.length} */}
+            </Text>
           </View>
         </TouchableOpacity>
       </StyledProductHeader>
