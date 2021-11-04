@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setError } from "../redux/actions/actions";
+import { resetError, setError } from "../redux/actions/actions";
 
 import Alert from "../components/Alert";
 
@@ -15,7 +15,6 @@ const Login = () => {
 
   //state variables for the password and errors used
   const [email, setEmail] = useState();
-
   const [password, setPassword] = useState();
 
   const error = useSelector((state) => state.error);
@@ -25,17 +24,27 @@ const Login = () => {
       navigation.navigate("Home");
     } else {
       dispatch(
-        setError({ message: "No login credentials given", type: "danger" })
+        setError({
+          message: "No login credentials given",
+          type: "danger",
+          screen: "login",
+        })
       );
       setTimeout(() => {
-        dispatch(setError());
+        dispatch(resetError());
       }, 5000);
     }
   };
 
   return (
     <SafeAreaView styles={{ flex: 1, position: "relative" }}>
-      {error && <Alert type={error.errorType} message={error.errorMessage} />}
+      {error.type && (
+        <Alert
+          screen={error.screen}
+          type={error.type}
+          message={error.message}
+        />
+      )}
       <KeyboardAvoidingView behavior="padding">
         <StyledLogin>
           <StyledLoginText>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
+import { useSelector, useDispatch } from "react-redux";
 
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View, Image } from "react-native";
@@ -12,20 +13,46 @@ import {
   secoondaryColorDark,
 } from "../helpers/Variables";
 
+import { addCart, resetError, setError } from "../redux/actions/actions";
+import Alert from "../components/Alert";
+
 const ProductDetails = ({ route, navigation }) => {
+  const dispatch = useDispatch();
+
   const { retailPrice, title, media, year, brand, gender } = route.params;
   const [size, setSize] = useState();
   const [color, setColor] = useState();
 
+  //getting state from redux store
+  const cart = useSelector((state) => state.cart);
+  const error = useSelector((state) => state.error);
+
   //function to submit the selection to the cart
   const handleAddtoCart = () => {
-    if (size && color) {
+    if (!(size && color)) {
+      dispatch(
+        setError({
+          message: "Select properties",
+          type: "danger",
+          screen: "product",
+        })
+      );
+
+      setTimeout(() => {
+        dispatch(resetError());
+      }, 5000);
+
       return;
     }
+
+    dispatch(addCart({ title, size, color, ...media, retailPrice }));
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: "#fff", position: "relative" }}
+    >
+      {error.message && <Alert message={error.message} type={error.type} />}
       <StyledProductHeader>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Feather name="chevron-left" size={24} color="black" />
@@ -36,7 +63,7 @@ const ProductDetails = ({ route, navigation }) => {
             source={require("../assets/logo.jpg")}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
           <Feather
             style={{ position: "relative" }}
             name="shopping-bag"
@@ -57,9 +84,7 @@ const ProductDetails = ({ route, navigation }) => {
               alignItems: "center",
             }}
           >
-            <Text style={{ color: `${primaryColorDark}` }}>
-              {/* {cart.length} */}
-            </Text>
+            <Text style={{ color: `${primaryColorDark}` }}>{cart.length}</Text>
           </View>
         </TouchableOpacity>
       </StyledProductHeader>

@@ -1,12 +1,13 @@
-const initState = { errorMessage: null, errorType: null };
+const initState = { message: null, type: null, screen: null };
 
 const errorReducer = (state = initState, action) => {
   switch (action.type) {
     case "SET_ERROR":
       return {
         ...state,
-        errorMessage: action.payload.message,
-        errorType: action.payload.type,
+        message: action.payload.message,
+        type: action.payload.type,
+        screen: action.payload.screen,
       };
     case "RESET_ERROR":
       return {
@@ -17,3 +18,5 @@ const errorReducer = (state = initState, action) => {
       return { ...state };
   }
 };
+
+export default errorReducer;

@@ -8,9 +8,9 @@ import {
   secoondaryColorLight,
 } from "../helpers/Variables";
 
-const Alert = ({ message, type }) => {
+const Alert = ({ message, type, screen }) => {
   return (
-    <StyledAlert type={type}>
+    <StyledAlert screen={screen} type={type}>
       <StyledAlertText type={type}>{message}</StyledAlertText>
     </StyledAlert>
   );
@@ -20,8 +20,11 @@ const StyledAlert = styled.View`
   position: absolute;
   padding: 10px 20px;
   border-radius: 10px;
-  bottom: 0;
+  bottom: 2%;
   left: 20%;
+  transform: ${(props) =>
+    props.screen === "login" ? "translateY(0)" : "translate(25px,-110px)"};
+  z-index: 10;
   background-color: ${(props) =>
     props.type === "danger" ? secoondaryColorLight : primaryColorLight};
 `;

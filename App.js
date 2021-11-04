@@ -19,6 +19,7 @@ import Home from "./app/screen/Home";
 import ProductDetails from "./app/screen/ProductDetails";
 
 import allReducers from "./app/redux/store";
+import Cart from "./app/screen/Cart";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -50,6 +51,7 @@ export default function App() {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="ProductDetails" component={ProductDetails} />
+            <Stack.Screen name="Cart" component={Cart} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

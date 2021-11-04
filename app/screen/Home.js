@@ -65,7 +65,10 @@ const Home = ({ navigation }) => {
         </TouchableOpacity>
         <StyledHomeLogo source={require("../assets/logo.jpg")} />
         <View>
-          <TouchableOpacity style={{ position: "relative" }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Cart")}
+            style={{ position: "relative" }}
+          >
             <Feather name="shopping-bag" size={24} color="black" />
             <View
               style={{
@@ -82,7 +85,7 @@ const Home = ({ navigation }) => {
               }}
             >
               <Text style={{ color: `${primaryColorDark}` }}>
-                {cart && cart.length}
+                {cart.length}
               </Text>
             </View>
           </TouchableOpacity>
