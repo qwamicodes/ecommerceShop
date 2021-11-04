@@ -2,9 +2,9 @@ import React from "react";
 import { Text } from "react-native";
 import styled from "styled-components/native";
 
-const CategoryContainer = ({ name }) => {
+const CategoryContainer = ({ name, index }) => {
   return (
-    <StyledCateg>
+    <StyledCateg index={index}>
       <Text style={{ fontSize: 18, fontFamily: "Zen-Regular" }}>{name}</Text>
     </StyledCateg>
   );

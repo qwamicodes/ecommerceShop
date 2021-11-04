@@ -4,6 +4,8 @@ import { KeyboardAvoidingView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
+import Alert from "../components/Alert";
+
 const Login = () => {
   const navigation = useNavigation();
 
@@ -18,11 +20,15 @@ const Login = () => {
       navigation.navigate("Home");
     } else {
       setError("No login credentials given");
+      setTimeout(() => {
+        setError(undefined);
+      }, 5000);
     }
   };
 
   return (
-    <SafeAreaView styles={{ flex: 1 }}>
+    <SafeAreaView styles={{ flex: 1, position: "relative" }}>
+      {error && <Alert type="danger" message={error} />}
       <KeyboardAvoidingView behavior="padding">
         <StyledLogin>
           <StyledLoginText>
@@ -31,17 +37,6 @@ const Login = () => {
           </StyledLoginText>
           <StyledLoginLogo source={require("../assets/logo.jpg")} />
           <StyledLoginFields>
-            {error && (
-              <Text
-                style={{
-                  color: "red",
-                  textAlign: "center",
-                  marginBottom: 2,
-                }}
-              >
-                {error}
-              </Text>
-            )}
             <StyledInputs
               type="username"
               placeholder="Username"
@@ -56,7 +51,7 @@ const Login = () => {
           </StyledLoginFields>
           <StyledLoginBtns>
             <StyledButtons onPress={handleSignin}>
-              <StyledButtonValue>Signin</StyledButtonValue>
+              <StyledButtonValue>Sign in</StyledButtonValue>
             </StyledButtons>
           </StyledLoginBtns>
         </StyledLogin>

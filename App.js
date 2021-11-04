@@ -1,5 +1,10 @@
 import React from "react";
 
+//importing React redux packages
+import { createStore, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
+import { Provider } from "react-redux";
+
 //import for the setting up of screen navigation
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,6 +18,8 @@ import Login from "./app/screen/Login";
 import Home from "./app/screen/Home";
 import ProductDetails from "./app/screen/ProductDetails";
 
+import allReducer from "./app/redux/store";
+
 export default function App() {
   const Stack = createStackNavigator();
 
@@ -22,19 +29,29 @@ export default function App() {
     "Zen-Light": require("./app/assets/fonts/Zen-Light.ttf"),
   });
 
+  const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+  const store = createStore(
+    allReducer,
+    composeEnhancers(applyMiddleware(thunk))
+  );
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
     return (
       <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{ headerShown: false }}
-        >
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="ProductDetails" component={ProductDetails} />
-        </Stack.Navigator>
+        <Provider store={store}>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={{ headerShown: false }}
+          >
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="ProductDetails" component={ProductDetails} />
+          </Stack.Navigator>
+        </Provider>
       </NavigationContainer>
     );
   }

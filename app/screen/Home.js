@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import uuid from "react-native-uuid";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   ScrollView,
@@ -14,13 +15,20 @@ import {
 
 import CategoryContainer from "../components/CategoryContainer";
 import Product from "../components/Product";
-import { primaryColorDark } from "../helpers/Variables";
+import { primaryColorDark, primaryColorLight } from "../helpers/Variables";
 import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
 
 const Home = ({ navigation }) => {
+  //state to store the api res data from the api
   const [products, setProducts] = useState();
+
+  //state for the toggling of the menu component in the home page
   const [toggleMenu, setToggleMenu] = useState(false);
 
+  //state for the cart information of the app
+  const cart = useSelector((state) => state.cart);
+
+  //function that fires when the home page mounts to go and fetch the api data
   useEffect(() => {
     const options = {
       method: "GET",
@@ -40,25 +48,43 @@ const Home = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={(styles.container, { position: "relative" })}>
       <StyledHomeHeader>
-        <TouchableOpacity onPress={() => setToggleMenu(!toggleMenu)}>
+        <TouchableOpacity
+          style={{
+            width: 35,
+            height: 35,
+            backgroundColor: "white",
+            borderRadius: 50,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => setToggleMenu(!toggleMenu)}
+        >
           <Ionicons name="md-menu-outline" size={24} color="black" />
         </TouchableOpacity>
         <StyledHomeLogo source={require("../assets/logo.jpg")} />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-            width: 80,
-          }}
-        >
-          <TouchableOpacity>
-            <Feather name="settings" size={24} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity>
+        <View>
+          <TouchableOpacity style={{ position: "relative" }}>
             <Feather name="shopping-bag" size={24} color="black" />
+            <View
+              style={{
+                backgroundColor: `${primaryColorLight}`,
+                borderRadius: 50,
+                position: "absolute",
+                padding: 2,
+                width: 20,
+                height: 20,
+                top: -10,
+                right: -8,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: `${primaryColorDark}` }}>
+                {cart && cart.length}
+              </Text>
+            </View>
           </TouchableOpacity>
         </View>
       </StyledHomeHeader>
@@ -80,23 +106,18 @@ const Home = ({ navigation }) => {
         </View>
       </StyledHomeHeading>
       <StyledHomeCateg>
-        {["Adidas", "Nike", "Jordan"].map((brand) => (
-          <CategoryContainer name={brand} key={uuid.v4()} />
+        {["All", "Adidas", "Nike", "Jordan"].map((brand, index) => (
+          <CategoryContainer index={index} name={brand} key={uuid.v4()} />
         ))}
       </StyledHomeCateg>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        style={{
-          flex: 1,
-          height: "100%",
-          marginHorizontal: "auto",
-        }}
-      >
+      <ScrollView style={styles.scrollContainer}>
         {products &&
           products.map((product) => (
             <Product
               submit={() =>
-                navigation.navigate("ProductDetails", { ...product })
+                navigation.navigate("ProductDetails", {
+                  ...product,
+                })
               }
               key={uuid.v4()}
               image={product.media.imageUrl}
@@ -115,6 +136,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: "#dfdfdf",
   },
+  scrollContainer: {
+    // flex: 1,
+    flexBasis: "70%",
+    height: "100%",
+    marginHorizontal: "auto",
+  },
 });
 
 const StyledHomeHeader = styled.View`
@@ -122,17 +149,17 @@ const StyledHomeHeader = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 20px;
 `;
 
 const StyledHomeLogo = styled.Image`
   height: 30px;
   width: 30px;
   border-radius: 50px;
-  margin-left: 50px;
 `;
 
 const StyledHomeHeading = styled.View`
-  flex-basis: 5%;
+  flex-basis: 10%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

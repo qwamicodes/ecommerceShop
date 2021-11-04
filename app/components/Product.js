@@ -18,6 +18,7 @@ const Product = ({ title, image, price, submit }) => {
             color: `${primaryColor}`,
             fontFamily: "Zen-Regular",
             textAlign: "center",
+            fontSize: 20,
           }}
         >
           {title}
@@ -42,11 +43,12 @@ const Product = ({ title, image, price, submit }) => {
 
 const StyledProduct = styled.TouchableOpacity`
   background-color: #fff;
-  width: 85%;
+  width: 90%;
   height: 330px;
-  border-radius: 20px;
+  border-radius: 10px;
   margin: 10px auto;
   overflow: hidden;
+  padding: 0 5%;
 `;
 
 const StyledProductImage = styled.View`
