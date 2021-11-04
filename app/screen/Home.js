@@ -15,6 +15,8 @@ import {
 
 import CategoryContainer from "../components/CategoryContainer";
 import Product from "../components/Product";
+import Loader from "../components/Loader";
+
 import { primaryColorDark, primaryColorLight } from "../helpers/Variables";
 import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
 
@@ -113,22 +115,35 @@ const Home = ({ navigation }) => {
           <CategoryContainer index={index} name={brand} key={uuid.v4()} />
         ))}
       </StyledHomeCateg>
-      <ScrollView style={styles.scrollContainer}>
-        {products &&
-          products.map((product) => (
+
+      {products > 0 ? (
+        <ScrollView style={styles.scrollContainer}>
+          {products.map((product) => (
             <Product
               submit={() =>
                 navigation.navigate("ProductDetails", {
                   ...product,
                 })
               }
-              key={uuid.v4()}
+              key={product.id}
+              id={product.id}
               image={product.media.imageUrl}
               title={product.title}
               price={product.retailPrice}
             />
           ))}
-      </ScrollView>
+        </ScrollView>
+      ) : (
+        <View
+          style={{
+            flexBasis: "70%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Loader />
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -140,7 +155,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#dfdfdf",
   },
   scrollContainer: {
-    // flex: 1,
     flexBasis: "70%",
     height: "100%",
     marginHorizontal: "auto",

@@ -19,7 +19,7 @@ import Alert from "../components/Alert";
 const ProductDetails = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
-  const { retailPrice, title, media, year, brand, gender } = route.params;
+  const { id, retailPrice, title, media, year, brand, gender } = route.params;
   const [size, setSize] = useState();
   const [color, setColor] = useState();
 
@@ -27,8 +27,14 @@ const ProductDetails = ({ route, navigation }) => {
   const cart = useSelector((state) => state.cart);
   const error = useSelector((state) => state.error);
 
+  const resetSelection = () => {
+    setSize(undefined);
+    setColor(undefined);
+  };
+
   //function to submit the selection to the cart
   const handleAddtoCart = () => {
+    //check if size and color exist (selected)
     if (!(size && color)) {
       dispatch(
         setError({
@@ -38,6 +44,7 @@ const ProductDetails = ({ route, navigation }) => {
         })
       );
 
+      //error disappears
       setTimeout(() => {
         dispatch(resetError());
       }, 5000);
@@ -45,7 +52,28 @@ const ProductDetails = ({ route, navigation }) => {
       return;
     }
 
-    dispatch(addCart({ title, size, color, ...media, retailPrice }));
+    //add the object data for the product to cart
+    addItemToCart({ id, title, size, color, ...media, retailPrice });
+
+    //reset selection
+    resetSelection();
+
+    //reset the error popup
+    setTimeout(() => {
+      dispatch(resetError());
+    }, 5000);
+  };
+
+  const addItemToCart = (data) => {
+    cart.filter((car) => car.id === data.id).length < 1
+      ? dispatch(addCart(data))
+      : dispatch(
+          setError({
+            message: "Already in cart",
+            type: "danger",
+            screen: "product",
+          })
+        );
   };
 
   return (
@@ -173,48 +201,56 @@ const ProductDetails = ({ route, navigation }) => {
           onPress={() => setColor("#2711ee")}
         ></StyledProductColor>
       </StyledProductColors>
-      <StyledProductPrice>
-        <View
-          style={{ flex: 0.5, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text
+      <View style={{ flex: 1, backgroundColor: "#f0f0f0" }}>
+        <StyledProductPrice>
+          <View
             style={{
-              fontFamily: "Zen-Regular",
-              fontSize: 28,
-              fontWeight: "700",
+              flex: 0.5,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#fff",
+              borderTopLeftRadius: 30,
             }}
           >
-            $ {retailPrice}
-          </Text>
-        </View>
-        <TouchableOpacity
-          onPress={handleAddtoCart}
-          style={{
-            flex: 0.5,
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "row",
-            backgroundColor: `${
-              gender === "men" ? primaryColorLight : secoondaryColor
-            }`,
-          }}
-        >
-          <MaterialCommunityIcons
-            name="cart-outline"
-            size={24}
-            color={gender === "men" ? primaryColorDark : secoondaryColorDark}
-          />
-          <Text
+            <Text
+              style={{
+                fontFamily: "Zen-Regular",
+                fontSize: 28,
+                fontWeight: "700",
+              }}
+            >
+              $ {retailPrice}
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={handleAddtoCart}
             style={{
-              fontFamily: "Zen-Regular",
-              fontSize: 20,
-              color: `${gender === "men" ? primaryColorDark : "black"}`,
+              flex: 0.5,
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+              backgroundColor: `${
+                gender === "men" ? primaryColorLight : secoondaryColor
+              }`,
             }}
           >
-            Add to Cart
-          </Text>
-        </TouchableOpacity>
-      </StyledProductPrice>
+            <MaterialCommunityIcons
+              name="cart-outline"
+              size={24}
+              color={gender === "men" ? primaryColorDark : secoondaryColorDark}
+            />
+            <Text
+              style={{
+                fontFamily: "Zen-Regular",
+                fontSize: 20,
+                color: `${gender === "men" ? primaryColorDark : "black"}`,
+              }}
+            >
+              Add to Cart
+            </Text>
+          </TouchableOpacity>
+        </StyledProductPrice>
+      </View>
     </SafeAreaView>
   );
 };
@@ -225,12 +261,14 @@ const StyledProductHeader = styled.View`
   padding: 20px;
   justify-content: space-between;
   align-items: center;
+  background-color: #fff;
   flex-basis: 10%;
 `;
 
 const StyledProductGender = styled.View`
   flex-direction: row;
   flex-basis: 8%;
+  background-color: #fff;
   justify-content: center;
   align-items: center;
 `;
@@ -246,8 +284,9 @@ const StyledProductGenderText = styled.Text`
 `;
 
 const StyledProductImage = styled.View`
-  flex-basis: 40%;
+  flex-basis: 38%;
   justify-content: center;
+  background-color: #fff;
   align-items: center;
   padding: 10px;
 `;
@@ -257,22 +296,29 @@ const StyledProductName = styled.View`
   justify-content: space-evenly;
   align-items: center;
   text-align: center;
+  background-color: #f0f0f0;
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
 `;
 
 const StyledProductSize = styled.View`
   flex-basis: 10%;
   flex-direction: row;
   justify-content: space-evenly;
+  background-color: #f0f0f0;
   align-items: center;
 `;
 
 const StyledProductSizeContainer = styled.TouchableOpacity`
+  background-color: #f0f0f0;
   padding: 10px 15px;
-  background-color: ${(props) => (props.active ? primaryColorLight : "#fff")};
+  background-color: ${(props) =>
+    props.active ? primaryColorLight : "#f0f0f0"};
   border-radius: 10px;
 `;
 
 const StyledProductColors = styled.View`
+  background-color: #f0f0f0;
   flex-basis: 10%;
   flex-direction: row;
   justify-content: space-evenly;
@@ -290,6 +336,8 @@ const StyledProductColor = styled.TouchableOpacity`
 const StyledProductPrice = styled.View`
   flex-direction: row;
   flex: 1;
+  border-top-right-radius: 20px;
+  overflow: hidden;
 `;
 
 export default ProductDetails;
