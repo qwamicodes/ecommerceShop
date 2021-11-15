@@ -25,15 +25,16 @@ const Cart = ({ navigation }) => {
 
   const amount = useSelector((state) => state.amount);
 
-  useEffect(() => {
-    cart.map((car) => {
-      setSubtotal((total) => total + car.quanity * car.retailPrice);
-      setTax(0.05 * subtotal);
-      setTotal(subtotal + tax);
-    });
+  // setTax(0.05 * subtotal);
+  // setTotal(subtotal + tax);
 
-    dispatch(updateTotal({ subtotal, tax, total }));
-  }, [cart]);
+  // useEffect(() => {
+  //   cart.map((car) =>
+  //     setSubtotal((total) => total + car.quantity * car.retailPrice)
+  //   );
+  // }, [subtotal]);
+
+  // dispatch(updateTotal({ subtotal, tax, total }));
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f0f0f0" }}>
@@ -97,7 +98,7 @@ const Cart = ({ navigation }) => {
                   fontSize: 22,
                 }}
               >
-                $ {amount.subtotal}
+                $ {subtotal}
               </Text>
             </View>
             <View
@@ -123,7 +124,7 @@ const Cart = ({ navigation }) => {
                   fontSize: 22,
                 }}
               >
-                ${amount.tax}
+                ${tax}
               </Text>
             </View>
           </StyledCartAmount>
@@ -153,7 +154,7 @@ const Cart = ({ navigation }) => {
                     fontFamily: "Zen-Regular",
                   }}
                 >
-                  {amount.total}
+                  {total}
                 </Text>
               </View>
             </View>
