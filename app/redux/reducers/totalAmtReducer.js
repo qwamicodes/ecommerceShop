@@ -10,3 +10,5 @@ const totalAmtReducer = (state = initState, action) => {
       return { ...state };
   }
 };
+
+export default totalAmtReducer;

@@ -21,7 +21,7 @@ import { primaryColorDark, primaryColorLight } from "../helpers/Variables";
 import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
 
 const Home = ({ navigation }) => {
-  //state to store the api res data from the api
+  //state to store the api res data from the API
   const [products, setProducts] = useState();
 
   //state for the toggling of the menu component in the home page
@@ -115,34 +115,26 @@ const Home = ({ navigation }) => {
           <CategoryContainer index={index} name={brand} key={uuid.v4()} />
         ))}
       </StyledHomeCateg>
-
-      {products > 0 ? (
-        <ScrollView style={styles.scrollContainer}>
-          {products.map((product) => (
-            <Product
-              submit={() =>
-                navigation.navigate("ProductDetails", {
-                  ...product,
-                })
-              }
-              key={product.id}
-              id={product.id}
-              image={product.media.imageUrl}
-              title={product.title}
-              price={product.retailPrice}
-            />
-          ))}
+      {products && products.length > 0 ? (
+        <ScrollView>
+          {products &&
+            products.map((product) => (
+              <Product
+                submit={() =>
+                  navigation.navigate("ProductDetails", {
+                    ...product,
+                  }) && products.length
+                }
+                key={product.id}
+                id={product.id}
+                image={product.media.imageUrl}
+                title={product.title}
+                price={product.retailPrice}
+              />
+            ))}
         </ScrollView>
       ) : (
-        <View
-          style={{
-            flexBasis: "70%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Loader />
-        </View>
+        <Loader />
       )}
     </SafeAreaView>
   );
@@ -153,11 +145,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: "#dfdfdf",
-  },
-  scrollContainer: {
-    flexBasis: "70%",
-    height: "100%",
-    marginHorizontal: "auto",
   },
 });
 

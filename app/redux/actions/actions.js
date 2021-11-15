@@ -5,6 +5,7 @@ const SET_ERROR = "SET_ERROR";
 const RESET_ERROR = "RESET_ERROR";
 const UPDATE_TOTAL = "UPDATE_TOTAL";
 const RESET_TOTAL = "RESET_TOTAL";
+const UPDATE_QUANTITY = "UPDATE_QUANTITY";
 
 export const addCart = (data) => {
   return {
@@ -42,6 +43,13 @@ export const resetError = () => {
 export const updateTotal = (data) => {
   return {
     type: UPDATE_TOTAL,
+    payload: data,
+  };
+};
+
+export const updateCartQuantity = (data) => {
+  return {
+    type: UPDATE_QUANTITY,
     payload: data,
   };
 };

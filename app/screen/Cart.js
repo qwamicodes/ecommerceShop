@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Image, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import uuid from "react-native-uuid";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Feather, MaterialIcons, Ionicons } from "@expo/vector-icons";
-import { resetCart } from "../redux/actions/actions";
+import { resetCart, updateTotal } from "../redux/actions/actions";
 import CartItems from "../components/CartItems";
 
-import uuid from "react-native-uuid";
 import {
   primaryColor,
   primaryColorLight,
@@ -18,13 +18,22 @@ import {
 const Cart = ({ navigation }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const [subTotal, setSubTotal] = useState(0);
+
+  const [subtotal, setSubtotal] = useState(0);
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
 
+  const amount = useSelector((state) => state.amount);
+
   useEffect(() => {
-    setTax(cart.length * 5);
-  }, []);
+    cart.map((car) => {
+      setSubtotal((total) => total + car.quanity * car.retailPrice);
+      setTax(0.05 * subtotal);
+      setTotal(subtotal + tax);
+    });
+
+    dispatch(updateTotal({ subtotal, tax, total }));
+  }, [cart]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f0f0f0" }}>
@@ -60,6 +69,7 @@ const Cart = ({ navigation }) => {
                   image={car.thumbUrl}
                   price={car.retailPrice}
                   title={car.title}
+                  quant={car.quantity}
                 />
               ))}
           </ScrollView>
@@ -87,7 +97,7 @@ const Cart = ({ navigation }) => {
                   fontSize: 22,
                 }}
               >
-                ${subTotal}
+                $ {amount.subtotal}
               </Text>
             </View>
             <View
@@ -113,7 +123,7 @@ const Cart = ({ navigation }) => {
                   fontSize: 22,
                 }}
               >
-                ${tax}
+                ${amount.tax}
               </Text>
             </View>
           </StyledCartAmount>
@@ -143,7 +153,7 @@ const Cart = ({ navigation }) => {
                     fontFamily: "Zen-Regular",
                   }}
                 >
-                  {total}
+                  {amount.total}
                 </Text>
               </View>
             </View>

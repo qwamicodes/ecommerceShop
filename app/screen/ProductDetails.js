@@ -53,7 +53,15 @@ const ProductDetails = ({ route, navigation }) => {
     }
 
     //add the object data for the product to cart
-    addItemToCart({ id, title, size, color, ...media, retailPrice });
+    addItemToCart({
+      id,
+      title,
+      size,
+      color,
+      ...media,
+      retailPrice,
+      quantity: 1,
+    });
 
     //reset selection
     resetSelection();

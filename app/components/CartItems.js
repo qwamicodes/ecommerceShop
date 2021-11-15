@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,9 +7,12 @@ import { Feather } from "@expo/vector-icons";
 import { primaryColor } from "../helpers/Variables";
 import { updateCart } from "../redux/actions/actions";
 
-const CartItems = ({ id, title, image, price }) => {
-  const [quantity, setQuantity] = useState(1);
+const CartItems = ({ id, title, image, price, quant }) => {
   const dispatch = useDispatch();
+
+  const [quantity, setQuantity] = useState(quant);
+  const [itemPrice, setItemPrice] = useState(price);
+
   const cart = useSelector((state) => state.cart);
 
   const changeQuantity = (type) => {
@@ -19,6 +22,16 @@ const CartItems = ({ id, title, image, price }) => {
       ? dispatch(updateCart(cart.filter((cartItem) => cartItem.id !== id)))
       : setQuantity(quantity - 1);
   };
+
+  useEffect(() => {
+    setItemPrice(price * quantity);
+
+    cart.map((car) => {
+      if (car.id === id) {
+        car.quantity = quantity;
+      }
+    });
+  }, [quantity]);
 
   return (
     <StyledCartItem>
@@ -47,7 +60,7 @@ const CartItems = ({ id, title, image, price }) => {
               fontSize: 18,
             }}
           >
-            $ {price}
+            $ {itemPrice}
           </Text>
         </View>
       </View>
