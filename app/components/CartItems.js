@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Feather } from "@expo/vector-icons";
 import { primaryColor } from "../helpers/Variables";
-import { updateCart } from "../redux/actions/actions";
+import { updateCart, updateTotal } from "../redux/actions/actions";
 
 const CartItems = ({ id, title, image, price, quant }) => {
   const dispatch = useDispatch();
@@ -14,6 +14,7 @@ const CartItems = ({ id, title, image, price, quant }) => {
   const [itemPrice, setItemPrice] = useState(price);
 
   const cart = useSelector((state) => state.cart);
+  const amount = useSelector((state) => state.amount);
 
   const changeQuantity = (type) => {
     type === "add"
@@ -31,6 +32,10 @@ const CartItems = ({ id, title, image, price, quant }) => {
         car.quantity = quantity;
       }
     });
+
+    // const { subtotal } = amount;
+
+    // dispatch(updateTotal({ subtotal: subtotal + quantity * price }));
   }, [quantity]);
 
   return (

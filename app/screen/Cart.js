@@ -17,24 +17,11 @@ import {
 
 const Cart = ({ navigation }) => {
   const dispatch = useDispatch();
+
   const cart = useSelector((state) => state.cart);
-
-  const [subtotal, setSubtotal] = useState(0);
-  const [tax, setTax] = useState(0);
-  const [total, setTotal] = useState(0);
-
   const amount = useSelector((state) => state.amount);
 
-  // setTax(0.05 * subtotal);
-  // setTotal(subtotal + tax);
-
-  // useEffect(() => {
-  //   cart.map((car) =>
-  //     setSubtotal((total) => total + car.quantity * car.retailPrice)
-  //   );
-  // }, [subtotal]);
-
-  // dispatch(updateTotal({ subtotal, tax, total }));
+  useEffect(() => {}, [amount]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f0f0f0" }}>
@@ -74,60 +61,6 @@ const Cart = ({ navigation }) => {
                 />
               ))}
           </ScrollView>
-          <StyledCartAmount>
-            <View
-              style={{
-                flex: 0.5,
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "Zen-Regular",
-                  fontSize: 16,
-                  color: "grey",
-                }}
-              >
-                Subtotal:
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Zen-Regular",
-                  fontSize: 22,
-                }}
-              >
-                $ {subtotal}
-              </Text>
-            </View>
-            <View
-              style={{
-                flex: 0.5,
-                flexDirection: "row",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "Zen-Regular",
-                  fontSize: 16,
-                  color: "grey",
-                }}
-              >
-                Taxes:
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Zen-Regular",
-                  fontSize: 22,
-                }}
-              >
-                ${tax}
-              </Text>
-            </View>
-          </StyledCartAmount>
           <StyledCartCheckout>
             <View
               style={{
@@ -154,7 +87,7 @@ const Cart = ({ navigation }) => {
                     fontFamily: "Zen-Regular",
                   }}
                 >
-                  {total}
+                  {amount.total}
                 </Text>
               </View>
             </View>
@@ -213,15 +146,6 @@ const StyledCartHeader = styled.View`
   padding: 10px 20px;
   justify-content: space-between;
   background-color: #fff;
-`;
-
-const StyledCartAmount = styled.View`
-  flex-basis: 12%;
-  background-color: #f0f0f0;
-  padding: 20px;
-  flex-direction: row;
-  align-items: center;
-  margin: 0 10px;
 `;
 
 const StyledCartCheckout = styled.View`
